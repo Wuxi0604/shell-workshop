@@ -47,6 +47,7 @@ cmd_struct* parse_command(char* str) {
 
 
 pipeline_struct* parse_pipeline(char *str) {
+  //返回一个指向新字符串的变量，注意释放， n代表最多复制n个字节
   char* copy = strndup(str, MAX_LEN);
   char* cmd_str;
   int n_cmds = 0;
@@ -65,11 +66,13 @@ pipeline_struct* parse_pipeline(char *str) {
 
   ret = calloc(sizeof(pipeline_struct) + n_cmds * sizeof(cmd_struct*), 1);
   ret->n_cmds = n_cmds;
-
+  
+  //1. 位置：在kernel/lib/string.c中，头文件<linux/string.h>中
+  //2. 函数功能：破坏性分割字符串，返回分割前一部分，后一部分保存在原字符中
+  //3. 函数原型：char * strsep(char **,const char *);
   while((cmd_str = strsep(&copy, "|"))) {
     ret->cmds[i++] = parse_command(cmd_str);
   }
-
   return ret;
 }
 

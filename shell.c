@@ -10,8 +10,56 @@
 ssize_t prompt_and_get_input(const char* prompt,
                             char **line,
                             size_t *len) {
-  fputs(prompt, stderr);
+  
+  //函数原型：int fputs(const char *str, FILE *stream)
+  fputs(prompt, stderr);//将rpompt字符串输出到屏幕
+  
+//#ifdef WUXI_USE_STD_GETLINE
   return getline(line, len, stdin);
+  
+// #else
+//   #define WUXI_RL_BUFSIZE 1024    //使用普通方式来获取line
+
+  // int bufsize = WUXI_RL_BUFSIZE;
+  // int position = 0;
+  // *line = malloc(sizeof(char*) * bufsize);
+  // int c;
+
+  // if(*line)
+  // {
+  //   fprintf(stderr, "wuxi: allocation error\n");
+  //   exit(EXIT_FAILURE);
+  // }
+  // while (1 == 1)
+  // {
+  //   c = getchar();
+  //   if(c == EOF)
+  //   {
+  //     exit(EXIT_FAILURE);
+  //   }
+  //   else if(c == '\n')
+  //   {
+  //     *line[position] = '\0';
+  //     return position + 1;
+  //   }
+  //   else
+  //   {
+  //     *line[position] = c;
+  //   }
+  //   position++;
+
+  //   if(position >= bufsize)
+  //   {
+  //     bufsize += WUXI_RL_BUFSIZE;
+  //     *line = realloc(*line, bufsize);
+  //     if(! *line)
+  //     {
+  //       fprintf(stderr, "wuxi: allocation error");
+  //       exit(EXIT_FAILURE);
+  //     }
+  //   }
+  // }
+//#endif
 }
 
 
@@ -59,7 +107,7 @@ int main() {
   char *line = NULL;
   size_t len = 0;
 
-  while(prompt_and_get_input("heeee> ", &line, &len) > 0) {
+  while(prompt_and_get_input("wuxi> ", &line, &len) > 0) {
     pipeline_struct* pipeline = parse_pipeline(line);
     int n_pipes = pipeline->n_cmds - 1;
     //print_pipeline(pipeline);
